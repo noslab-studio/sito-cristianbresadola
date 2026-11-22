@@ -67,6 +67,7 @@
   .scelta input{margin-top:.28rem;width:18px;height:18px;flex-shrink:0;accent-color:var(--petrol)}
   .scelta .testo strong{display:block;color:var(--petrol);font-size:.98rem}
   .scelta .testo span{font-size:.88rem;color:var(--charcoal-soft)}
+  .scelta .testo .nota{display:block;margin-top:.45rem;font-size:.82rem}
   .scelta.obbligatoria{background:var(--ivory);border-color:var(--frost)}
   button{width:100%;padding:.9rem;border:0;border-radius:8px;background:var(--salt-glow);
     color:var(--petrol-dark);font-size:1rem;font-weight:700;cursor:pointer;
@@ -108,6 +109,8 @@
        Per qualunque cosa:
        <a href="mailto:info@cristianbresadola.com">info@cristianbresadola.com</a>
        &middot; 339 638 3790.</p>
+    <p class="fine">Chi altro vede questi dati, e perché, è scritto per intero
+       nell'<a href="/privacy-policy.html">informativa sulla privacy</a>.</p>
 
     <h2>Cosa ti chiedo</h2>
 
@@ -129,6 +132,10 @@
               volta dopo. Sono dati sulla tua salute e per legge hanno bisogno di un
               consenso a parte. Puoi dire di no: continuerò a riceverti, semplicemente
               non scriverò niente.</span>
+        <span class="nota">Per riordinare gli appunti uso un modello di intelligenza
+              artificiale di Anthropic, che ha sede negli Stati Uniti. Su Telegram,
+              dove mi arrivano gli avvisi dello studio, i dati sulla tua salute non
+              passano mai.</span>
       </span>
     </label>
 
@@ -150,6 +157,7 @@
       chiedermi di vederli, correggerli, cancellarli o di revocare quello che hai
       appena detto: basta una riga a info@cristianbresadola.com. Non li vendo,
       non li cedo a nessuno e non li uso per profilarti.
+      <br>Testo del 22 novembre 2026 (versione informativa-2026-11).
     </div>
   </div>
 
@@ -165,6 +173,12 @@
 
 <script type="module">
 const API = 'https://okasxfvoyihovohlaypz.supabase.co/functions/v1/consenso-cliente';
+// LA VERSIONE DEL TESTO (22/11/2026). E' quella scritta in fondo al modulo e
+// nell'informativa, e parte con il consenso. La funzione consenso-cliente oggi
+// registra una sua costante (VERSIONE_INFORMATIVA) e questo campo lo ignora:
+// le due vanno tenute uguali, e la funzione non deve mai fidarsi di un valore
+// che non conosce.
+const VERSIONE_INFORMATIVA = 'informativa-2026-11';
 const token = new URLSearchParams(location.search).get('t') || '';
 
 const mostra = (id) => {
@@ -222,6 +236,7 @@ document.getElementById('invia').addEventListener('click', async () => {
         privacy: true,
         dati_salute: document.getElementById('c-salute').checked,
         marketing: document.getElementById('c-marketing').checked,
+        versione_informativa: VERSIONE_INFORMATIVA,
       }),
     });
     const d = await r.json();
